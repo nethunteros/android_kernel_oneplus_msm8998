@@ -51,7 +51,7 @@ void set_earpiece_gain(int gain);
 
 // headphone levels
 #define HEADPHONE_DEFAULT		0
-#define HEADPHONE_REG_OFFSET	-6
+#define HEADPHONE_REG_OFFSET	0
 #define HEADPHONE_MIN 			-30
 #define HEADPHONE_MAX 			30
 

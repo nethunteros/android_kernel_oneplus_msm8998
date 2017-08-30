@@ -3194,6 +3194,8 @@ static umode_t fsg_lun_dev_is_visible(struct kobject *kobj,
 	struct device *dev = kobj_to_dev(kobj);
 	struct fsg_lun *lun = fsg_lun_from_dev(dev);
 
+        if (attr == &dev_attr_cdrom.attr)
+		return lun->cdrom ? S_IRUGO : (S_IWUSR | S_IRUGO);
 	if (attr == &dev_attr_ro.attr)
 		return lun->cdrom ? S_IRUGO : (S_IWUSR | S_IRUGO);
 	if (attr == &dev_attr_file.attr)
@@ -3252,6 +3254,7 @@ int fsg_common_create_lun(struct fsg_common *common, struct fsg_lun_config *cfg,
 		dev_set_name(&lun->dev, "%s", name);
 		lun->name = dev_name(&lun->dev);
 
+		// this was probably previously device_create_file
 		rc = device_register(&lun->dev);
 		if (rc) {
 			pr_info("failed to register LUN%d: %d\n", id, rc);

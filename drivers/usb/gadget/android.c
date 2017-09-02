@@ -3499,8 +3499,8 @@ functions_store(struct device *pdev, struct device_attribute *attr,
 			if (ffs_enabled && !strcmp(name, "ffs"))
 				continue;
 
-			if (!strcmp(name, "hid"))
-				continue; /* enable HID gadgets last */
+			if (hid_enabled && !strcmp(name, "hid"))
+ 				continue;
 
 			if (!strcmp(name, "rndis") &&
 				!strcmp(strim(rndis_transports), "BAM2BAM_IPA"))

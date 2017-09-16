@@ -131,6 +131,9 @@ static unsigned long sel_last_ino = SEL_INO_NEXT - 1;
 static ssize_t sel_read_enforce(struct file *filp, char __user *buf,
 				size_t count, loff_t *ppos)
 {
+#ifdef CONFIG_SECURITY_SELINUX_FAKE_ENFORCE
+	int selinux_enforcing = 1;
+#endif
 	char tmpbuf[TMPBUFLEN];
 	ssize_t length;
 
@@ -168,6 +171,12 @@ static ssize_t sel_write_enforce(struct file *file, const char __user *buf,
 	length = -EINVAL;
 	if (sscanf(page, "%d", &new_value) != 1)
 		goto out;
+
+#if defined(CONFIG_SECURITY_SELINUX_ALWAYS_ENFORCE)
+	new_value = 1;
+#elif defined(CONFIG_SECURITY_SELINUX_NEVER_ENFORCE)
+	new_value = 0;
+#endif
 
 	if (new_value != selinux_enforcing) {
 		length = task_has_security(current, SECURITY__SETENFORCE);
